@@ -10,7 +10,7 @@ class Equation:
         variable = ""
 
         for i in token:
-            if i in "012345678.":
+            if i in "-+012345678.":
                 coeff += i
             else:
                 variable += i
@@ -66,6 +66,10 @@ class Equation:
 
 
 def solve(coeff_matrix, constant_matrix):
+    if coeff_matrix.det() == 0:
+        print("Infintely many / no solutions")
+        return
+
     inv_coeff = coeff_matrix.inverse()
     result_matrix = matrix.Matrix.mat_mul(inv_coeff, constant_matrix)
 
@@ -96,8 +100,10 @@ def output_solution(result_matrix, eq_coeffs):
 def main():
     equations = []
 
+    print("Enter equations: ")
+
     while True:
-        inp = input("Enter equation: ")
+        inp = input("> ")
 
         if inp == "":
             break
@@ -107,7 +113,8 @@ def main():
     coeff_matrix, constant_matrix = build_matrices(equations)
     result_matrix = solve(coeff_matrix, constant_matrix)
 
-    output_solution(result_matrix, equations[0].coeffs)
+    if result_matrix is not None:
+        output_solution(result_matrix, equations[0].coeffs)
 
 
 if __name__ == "__main__":
